@@ -8,6 +8,7 @@
         "name": "APPI SASU"
     },
     "license": "SEE LICENSE IN license.txt",
+    "repository": "https://github.com/appi-solutions/vs-auto-header",
     "engines": {
         "vscode": "^1.0.0"
     },
