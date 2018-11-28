@@ -31,13 +31,11 @@ This extensions inserts an header in a new file or an existing file.
 Nicolas Boulogne-Curriez
 
 ## Release notes
-- Adds a file header when creating a new file
-- Asks before adding a file header in existing file
+- Fixed header insertion. Header is now inserted at (0,0)
+- Escape key cancel header insertion
 
 ## Known bugs
-- Dates don't update
-- Header is inserted in the wrong file when you change the file while confirming header insertion
-- 'Escape' confirm the header insertion
+- Date update in header is not updated
 
 ## Table of contents
 1. [Configuration](#configuration)

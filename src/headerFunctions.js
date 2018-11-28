@@ -38,10 +38,10 @@ exports.templates = {
  * @param {string} templateName template's name
  */
 function popHeader(templateName) {
-    return ((editBuilder, data, line) => {
+    return ((editBuilder, data) => {
         const config = vscode.workspace.getConfiguration('fileheader');
         const symbol = new template(config[templateName]).render(data);
-        editBuilder.insert(new vscode.Position(line, 0), symbol);
+        editBuilder.insert(new vscode.Position(0, 0), symbol);
     });
 }
 

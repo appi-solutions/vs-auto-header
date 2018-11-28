@@ -44,9 +44,9 @@ function replaceHeader(lines, symbol, config) {
         };
 
         vscode.window.showInputBox(res).then(value => {
-            if (!value || value === 'Y') {
-                const line = editor.selection.active.line;
-
+            if (value === undefined) {
+                return;
+            } else if (value === 'Y' || !value) {
                 // Creating the header
                 editor.edit(function (editBuilder) {
                     const time = moment().format('YYYY-MM-DD h:mm:ss a');
@@ -58,7 +58,7 @@ function replaceHeader(lines, symbol, config) {
                         updateTime: time
                     };
                     try {
-                        templates.templates[symbol](editBuilder, data, line);
+                        templates.templates[symbol](editBuilder, data);
                     } catch (error) {
                         reject(error);
                     }
