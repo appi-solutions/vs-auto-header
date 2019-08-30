@@ -1,3 +1,9 @@
+/**
+ * @author Guillaume Robin <guillaume.robin@appi-conseil.com>
+ * @file Description
+ * @desc Created on 2018-12-03 10:36:24 am
+ * @copyright APPI SASU
+ */
 const vscode = require('vscode');
 const fs = require('fs');
 const templates = require('./headerFunctions');
@@ -9,15 +15,15 @@ const moment = require('moment');
  * @param {TextEncoder} type utf8
  */
 exports.parseHeader = (fileName, type) => {
-    return new Promise((resolve, reject) =>
-        fs.readFile(fileName, type, (err, data) => {
-            const lines = data.split(' ');
-            if (err) {
-                return reject(err);
-            }
-            resolve(lines);
-        })
-    );
+  return new Promise((resolve, reject) =>
+    fs.readFile(fileName, type, (err, data) => {
+      if (err) {
+        return reject(err);
+      }
+      const lines = data.match(/[^\r\n]+/g);
+      resolve(lines);
+    })
+  );
 };
 
 /**
@@ -27,49 +33,46 @@ exports.parseHeader = (fileName, type) => {
  * @param {string} config configuration's user
  */
 function replaceHeader(lines, symbol, config) {
-    return new Promise((resolve, reject) => {
-        const editor = vscode.editor || vscode.window.activeTextEditor;
-        symbol.split(' ');
-        const document = editor.document;
-        const lineCount = document.lineCount;
-        for (let x = 0; x < lineCount; x++) {
-            if (lines[x] === '@Author:') {
-                return reject();
-            }
-        }
+  return new Promise((resolve, reject) => {
+    const editor = vscode.editor || vscode.window.activeTextEditor;
+    for (let x = 0; x < lines.length; x++) {
+      const res = lines[x].match(/[ *#]+@author/g);
+      if (res !== null) {
+        return reject();
+      }
+    }
 
-        const res = vscode.InputBoxOptions = {
-            prompt: 'Do you want an header in this file ?',
-            placeHolder: 'Y/n'
-        };
+    const res = vscode.InputBoxOptions = {
+      prompt: 'Do you want an header in this file ?',
+      placeHolder: 'Y/n'
+    };
 
-        vscode.window.showInputBox(res).then(value => {
-            if (value === undefined) {
-                return;
-            } else if (value === 'Y' || !value) {
-                // Creating the header
-                editor.edit(function (editBuilder) {
-                    const time = moment().format('YYYY-MM-DD h:mm:ss a');
-                    const data = {
-                        author: config.Author,
-                        email: config.Email,
-                        lastModifiedBy: config.LastModifiedBy,
-                        createTime: time,
-                        updateTime: time
-                    };
-                    try {
-                        templates.templates[symbol](editBuilder, data);
-                    } catch (error) {
-                        reject(error);
-                    }
-                });
-
-                vscode.workspace.saveAll(true);
-                resolve(lines);
-            }
-            return;
+    vscode.window.showInputBox(res).then(value => {
+      if (value === undefined) {
+        return;
+      } else if (value === 'Y' || !value) {
+        editor.edit(function (editBuilder) {
+          const time = moment().format('YYYY-MM-DD h:mm:ss a');
+          const data = {
+            author: config.Author,
+            email: config.Email,
+            lastModifiedBy: config.Author,
+            createTime: time,
+            updateTime: time
+          };
+          try {
+            templates.templates[symbol](editBuilder, data);
+          } catch (error) {
+            reject(error);
+          }
         });
+
+        vscode.workspace.saveAll(true);
+        resolve(lines);
+      }
+      return;
     });
+  });
 }
 
 exports.replaceHeader = replaceHeader;

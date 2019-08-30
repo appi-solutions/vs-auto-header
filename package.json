@@ -1,84 +1,61 @@
 {
-    "name": "vs-auto-header",
-    "displayName": "vs-auto-header",
-    "description": "Insert header comment after creating a file or opening a file.",
-    "version": "1.0.1",
-    "publisher": "appi-systems",
-    "repository": "https://github.com/appi-solutions/vs-auto-header",
-    "author": {
-        "name": "APPI SASU"
-    },
-    "license": "SEE LICENSE IN license.txt",
-    "engines": {
-        "vscode": "^1.0.0"
-    },
-    "categories": [
-        "Other"
-    ],
-    "activationEvents": [
-        "*"
-    ],
-    "main": "./src/index",
-    "contributes": {
-        "configuration": {
-            "type": "object",
-            "title": "File header Configuration",
-            "properties": {
-                "fileheader.Author": {
-                    "type": "string",
-                    "default": "Firstname Lastname",
-                    "description": "Wholename of the developer"
-                },
-                "fileheader.Email": {
-                    "type": "string",
-                    "default": "firstname.lastname@example.com",
-                    "description": "E-mail of the developer"
-                },
-                "fileheader.star": {
-                    "type": "string",
-                    "default": "/*\r\n * @Author: {author}\r\n * @Email: {email}\r\n * @Date: {createTime}\r\n * @Last Modified by:   {lastModifiedBy}\r\n * @Last Modified time:   {updateTime}\r\n * @Description: Description\r\n */\r\n",
-                    "description": "Common template with star"
-                },
-                "fileheader.hashtag": {
-                    "type": "string",
-                    "default": "#\r\n# @Author: {author}\r\n# @Email: {email}\r\n# @Date: {createTime}\r\n# @Last Modified by:   {lastModifiedBy}\r\n# @Last Modified time:   {updateTime}\r\n# @Description: Description\r\n#\r\n",
-                    "description": "Common template with hashtag."
-                },
-                "fileheader.html": {
-                    "type": "string",
-                    "default": "<!--\r\n @Author: {author}\r\n @Email: {email}\r\n @Date: {createTime}\r\n @Last Modified by:   {lastModifiedBy}\r\n @Last Modified time:   {updateTime}\r\n @Description: Description\r\n-->\r\n",
-                    "description": "Common template with html."
-                },
-                "fileheader.LastModifiedBy": {
-                    "type": "string",
-                    "default": "Firstname Lastname",
-                    "description": "Wholename of the developer"
-                }
-            }
+  "name": "vs-auto-header",
+  "displayName": "vs-auto-header",
+  "description": "Insert header comment after creating a file or opening a file.",
+  "version": "1.0.9",
+  "publisher": "appi-systems",
+  "repository": "https://github.com/appi-solutions/vs-auto-header",
+  "author": {
+    "name": "APPI SASU"
+  },
+  "license": "SEE LICENSE IN license.txt",
+  "engines": {
+    "vscode": "^1.0.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./src/index",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "File header Configuration",
+      "properties": {
+        "fileheader.Author": {
+          "type": "string",
+          "default": "Firstname Lastname",
+          "description": "Wholename of the developer"
+        },
+        "fileheader.Email": {
+          "type": "string",
+          "default": "firstname.lastname@example.com",
+          "description": "E-mail of the developer"
         }
-    },
-    "scripts": {
-        "postinstall": "node ./node_modules/vscode/bin/install"
-    },
-    "devDependencies": {
-        "eslint": "^5.7.0",
-        "husky": "^1.1.4",
-        "lint-staged": "^7.3.0",
-        "vscode": "^1.1.21"
-    },
-    "dependencies": {
-        "config": "^2.0.1",
-        "moment": "^2.22.2"
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged"
-        }
-    },
-    "lint-staged": {
-        "src/*.js": [
-            "eslint --fix",
-            "git add"
-        ]
+      }
     }
+  },
+  "scripts": {
+    "postinstall": "node ./node_modules/vscode/bin/install"
+  },
+  "devDependencies": {
+    "eslint": "^5.7.0",
+    "husky": "^1.1.4",
+    "lint-staged": "^7.3.0",
+    "prettier": "^1.18.2",
+    "pretty-quick": "^1.11.1",
+    "vscode": "^1.1.36"
+  },
+  "dependencies": {
+    "config": "^2.0.1",
+    "moment": "^2.22.2",
+    "remove": "^0.1.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  }
 }
