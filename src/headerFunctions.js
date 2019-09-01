@@ -1,30 +1,32 @@
 const vscode = require('vscode');
 const { parseHeader, replaceHeader } = require('./helpers');
+const fs = require('fs');
 
 exports.extCategory = {
-  'javascript': readHeader(' * '),
-  'cpp': readHeader(' * '),
-  'c': readHeader(' * '),
-  'csharp': readHeader(' * '),
-  'css': readHeader(' * '),
-  'go': readHeader(' * '),
-  'groovy': readHeader(' * '),
-  'java': readHeader(' * '),
-  'less': readHeader(' * '),
+  javascript: readHeader(' * '),
+  cpp: readHeader(' * '),
+  c: readHeader(' * '),
+  csharp: readHeader(' * '),
+  css: readHeader(' * '),
+  go: readHeader(' * '),
+  groovy: readHeader(' * '),
+  java: readHeader(' * '),
+  less: readHeader(' * '),
   'objectiv-c': readHeader(' * '),
   'objectiv-cpp': readHeader(' * '),
-  'razor': readHeader(' * '),
-  'scss': readHeader(' * '),
-  'sql': readHeader(' * '),
-  'swift': readHeader(' * '),
-  'typescript': readHeader(' * '),
-  'makefile': readHeader('# '),
-  'dockerfile': readHeader('# '),
-  'coffeescript': readHeader('# '),
-  'yaml': readHeader('# '),
-  'html': readHeader('<!--'),
-  'jade': readHeader('<!--'),
-  'xml': readHeader('<!--')
+  razor: readHeader(' * '),
+  scss: readHeader(' * '),
+  sql: readHeader(' * '),
+  swift: readHeader(' * '),
+  typescript: readHeader(' * '),
+  makefile: readHeader('# '),
+  dockerfile: readHeader('# '),
+  coffeescript: readHeader('# '),
+  yaml: readHeader('# '),
+  html: readHeader('<!--'),
+  jade: readHeader('<!--'),
+  xml: readHeader('<!--'),
+  python: readHeader('# ')
 };
 
 exports.templates = {
@@ -34,9 +36,12 @@ exports.templates = {
 };
 
 const settings = {
-  star: '/**\r\n * @author {author} <{email}>\r\n * @file Description\r\n * @desc Created on {createTime}\r\n * @copyright APPI SASU\r\n */\r\n',
-  hashtag: '##\r\n# @author {author} <{email}>\r\n # @file Description\r\n # @desc Created on {createTime}\r\n # @copyright APPI SASU\r\n #\r\n',
-  html: '<!--\r\n @author {author} <{email}>\r\n @file Description\r\n @desc Created on {createTime}\r\n @copyright APPI SASU\r\n -->\r\n'
+  star:
+    '/**\r\n * @author {author} <{email}>\r\n * @file Description\r\n * @desc Created on {createTime}\r\n * @copyright {copyrights}\r\n */\r\n',
+  hashtag:
+    '##\r\n# @author {author} <{email}>\r\n # @file Description\r\n # @desc Created on {createTime}\r\n # @copyright {copyrights}\r\n #\r\n',
+  html:
+    '<!--\r\n @author {author} <{email}>\r\n @file Description\r\n @desc Created on {createTime}\r\n @copyright {copyrights}\r\n -->\r\n'
 };
 
 /**
@@ -44,10 +49,10 @@ const settings = {
  * @param {string} templateName template's name
  */
 function popHeader(templateName) {
-  return ((editBuilder, data) => {
+  return (editBuilder, data) => {
     const symbol = new template(settings[templateName]).render(data);
     editBuilder.insert(new vscode.Position(0, 0), symbol);
-  });
+  };
 }
 
 /**
@@ -57,8 +62,7 @@ function popHeader(templateName) {
  * @param {string} end end character
  */
 function readHeader(symbol) {
-  return ((filename) => {
-    const config = vscode.workspace.getConfiguration('fileheader');
+  return (config, filename) => {
     parseHeader(filename, 'utf8')
       .then(lines => replaceHeader(lines, symbol, config))
       .catch(err => {
@@ -66,7 +70,7 @@ function readHeader(symbol) {
           console.log(err);
         }
       });
-  });
+  };
 }
 
 /**
@@ -77,8 +81,15 @@ function readHeader(symbol) {
 function pushLoop(tpl, code) {
   let match;
   let re = /\{\s*([a-zA-Z._0-9()]+)(\s*\|\s*safe)?\s*\}/m,
-    addLine = function (text) {
-      code.push('r.push(\'' + text.replace(/'/g, '\\\'').replace(/\n/g, '\\n').replace(/\r/g, '\\r') + '\');');
+    addLine = function(text) {
+      code.push(
+        "r.push('" +
+          text
+            .replace(/'/g, "\\'")
+            .replace(/\n/g, '\\n')
+            .replace(/\r/g, '\\r') +
+          "');"
+      );
     };
   while ((match = re.exec(tpl)) !== null) {
     if (match.index > 0) {
@@ -103,13 +114,13 @@ function template(tpl) {
   let code = [
     'let r=[];',
     'const _html = function (str) {',
-    'return str.replace(/&/g, \'&amp;\').replace(/"/g, \'&quot;\').replace(/\'/g, \'&#39;\').replace(/</g, \'&lt;\').replace(/>/g, \'&gt;\');',
+    "return str.replace(/&/g, '&amp;').replace(/\"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');",
     '};'
   ];
   pushLoop(tpl, code);
-  code.push('return r.join(\'\');');
+  code.push("return r.join('');");
   fn = new Function(code.join('\n'));
-  this.render = function (model) {
+  this.render = function(model) {
     return fn.apply(model);
   };
 }

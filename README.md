@@ -1,6 +1,6 @@
 # VS Auto Header
 
-**Version:** v1.0.9
+**Version:** v1.0.10
 
 ## Description
 
@@ -31,6 +31,7 @@ This extension inserts an header in a new file or an existing file.
 - HTML
 - Jade
 - XML
+- Python
 
 ## Table of contents
 
@@ -53,6 +54,8 @@ When a new file is created and has code inside, VS Code will be able to detect w
 
 ## Configure
 
+### Global scope
+
 1. Go to `Preferences` > `Settings`
 
 <p align="center">
@@ -71,6 +74,20 @@ When a new file is created and has code inside, VS Code will be able to detect w
   <img src="https://github.com/appi-solutions/vs-auto-header/raw/master/docs/img/settings.png" />
 </p>
 
+### Project scope
+
+You can also override global configuration using a file `.vsconfig` at the root directory of your project. It has to respect JSON format and implement the following variables:
+
+```json
+{
+  "fileheader": {
+    "Author": "APPI",
+    "Email": "support@appi-conseil.com",
+    "Copyrights": "GPL-3.0"
+  }
+}
+```
+
 ### Example
 
 ```javascript
@@ -84,9 +101,16 @@ When a new file is created and has code inside, VS Code will be able to detect w
 
 ## Future implementations
 
-- [ ] Customized settings by project
+_Feel free to propose new ideas by opening new issues ! :rocket:_
+
+- [x] Customized settings per project (v1.0.10)
 
 ## Release notes
+
+**v1.0.10**
+
+- Add per project configuration using `.vsconfig`
+- Add `python` support
 
 **v1.0.9**
 
@@ -105,7 +129,13 @@ When a new file is created and has code inside, VS Code will be able to detect w
 
 ## How to contribute?
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+**Contributions are most welcome! :smile:**
+
+1. Fork it
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Commit your changes (git commit -am 'Added some feature')
+4. Push to the branch (git push origin my-new-feature)
+5. Create new Pull Request
 
 ## Contributors
 

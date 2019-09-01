@@ -42,18 +42,19 @@ function replaceHeader(lines, symbol, config) {
       }
     }
 
-    const res = vscode.InputBoxOptions = {
+    const res = (vscode.InputBoxOptions = {
       prompt: 'Do you want an header in this file ?',
       placeHolder: 'Y/n'
-    };
+    });
 
     vscode.window.showInputBox(res).then(value => {
       if (value === undefined) {
         return;
       } else if (value === 'Y' || !value) {
-        editor.edit(function (editBuilder) {
+        editor.edit(function(editBuilder) {
           const time = moment().format('YYYY-MM-DD h:mm:ss a');
           const data = {
+            copyrights: config.Copyrights,
             author: config.Author,
             email: config.Email,
             lastModifiedBy: config.Author,

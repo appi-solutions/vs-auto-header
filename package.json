@@ -2,7 +2,7 @@
   "name": "vs-auto-header",
   "displayName": "vs-auto-header",
   "description": "Insert header comment after creating a file or opening a file.",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "publisher": "appi-systems",
   "repository": "https://github.com/appi-solutions/vs-auto-header",
   "author": {
@@ -33,6 +33,11 @@
           "type": "string",
           "default": "firstname.lastname@example.com",
           "description": "E-mail of the developer"
+        },
+        "fileheader.Copyrights": {
+          "type": "string",
+          "default": "APPI SASU",
+          "description": "Copyright"
         }
       }
     }
